@@ -27,42 +27,42 @@ public class Jogo_Liga_4 {
 
     }
 
+    //Controle de todo o Jogo
     private static void jogar(char tabuleiro[][], Scanner teclado, char jogador, char computador) {
-        char verifica;
+        char op;
         int jogadas;
         boolean ganhou = false;
 
         do {
             jogadas = 0;
-            verifica = ' ';
+            op = ' ';
             tabuleiroLimpar(tabuleiro);
 
             var startPlayer = sortear(-1, 2);
 
             while (jogadas != 42) {
                 jogadas++;
-                if (startPlayer == 1 && jogadas < 42) {
+                if (startPlayer == 1 && jogadas <= 42) {
                     ganhou = jogador(teclado, tabuleiro, jogador);
                     startPlayer = 0;
 
-                } else if (startPlayer == 0 && jogadas < 42) {
+                } else if (startPlayer == 0 && jogadas <= 42) {
                     ganhou = computador(tabuleiro, computador);
                     startPlayer = 1;
                 }
                 if (ganhou) {
                     break;
                 }
-
                 desenhaTabuleiro(tabuleiro, jogadas);
             }
 
             if (jogadas == 42 && ganhou == false) {
-                System.out.println("Empate");
+                System.out.println("Empate!");
                 System.out.println("Deseja Jogar Novamente? (S)Sim ou (N)Não");
-                verifica = teclado.next().charAt(0);
-                verifica = Character.toUpperCase(verifica);
+                op = teclado.next().charAt(0);
+                op = Character.toUpperCase(op);
             }
-        } while (verifica != 'N');
+        } while (op != 'N');
     }
 
     //Controle Jogadas Jogador
@@ -79,18 +79,17 @@ public class Jogo_Liga_4 {
                 System.out.println("Valor Invalído, Informe Novamente");
             }
             if (coluna <= 6 && coluna >= 0) {
-                linha = encontrarUltimaPosicaoLivre(tabuleiro,coluna);
+                linha = encontrarUltimaPosicaoLivre(tabuleiro, coluna);
             }
-             if (linha == -1){
+            if (linha == -1) {
                 System.out.println("Coluna Totalmente Preenchida");
-            }
-            else if(linha >= 0 || linha <= 5){
+            } else if (linha >= 0 || linha <= 5) {
                 verifica = true;
                 tabuleiro[linha][coluna] = jogador;
             }
         } while (!verifica);
 
-        boolean ganhou = ganhou(tabuleiro, jogador);
+        boolean ganhou = ganhou(tabuleiro);
         if (ganhou) {
             System.out.println("Jogador Venceu..");
         }
@@ -104,14 +103,14 @@ public class Jogo_Liga_4 {
         System.out.println("Computador Jogando..");
         do {
             int coluna = sortear(-1, 6);
-            linha = encontrarUltimaPosicaoLivre(tabuleiro,coluna);
-            if (linha != -1){
+            linha = encontrarUltimaPosicaoLivre(tabuleiro, coluna);
+            if (linha != -1) {
                 verifica = true;
                 tabuleiro[linha][coluna] = computador;
             }
 
         } while (!verifica);
-        boolean ganhou = ganhou(tabuleiro, computador);
+        boolean ganhou = ganhou(tabuleiro);
         if (ganhou) {
             System.out.println("Computador Venceu..");
         }
@@ -162,6 +161,7 @@ public class Jogo_Liga_4 {
         return (int) ((Math.random() * (fim - inicio)) + inicio);
     }
 
+    //Procura a maior linha disponível
     public static int encontrarUltimaPosicaoLivre(char[][] tabuleiro, int coluna) {
         int posicao = -1;
         for (int linha = tabuleiro.length - 1; linha >= 0; linha--) {
@@ -174,7 +174,8 @@ public class Jogo_Liga_4 {
         return posicao;
     }
 
-    private static boolean ganhou(char tabuleiro[][], char letra) {
+    //Verifica se ganhou
+    private static boolean ganhou(char tabuleiro[][]) {
         // Verificar linhas
         for (int i = 0; i < tabuleiro.length; i++) {
             for (int j = 0; j < tabuleiro.length + 1; j++) {
@@ -186,12 +187,7 @@ public class Jogo_Liga_4 {
             }
         }
 
-
         return false;
-    }
-
-    private static void posicionaPeca() {
-
     }
 
     public static void main(String[] args) {
